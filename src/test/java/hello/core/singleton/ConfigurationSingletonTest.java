@@ -36,4 +36,13 @@ public class ConfigurationSingletonTest {
         // AppConfig의 자바코드를 보면 분명히 각각 두번 new MemoryMemberRepository를 호출해서
         // 다른 인스턴스가 생성되어야 하는데..?
     }
+
+    @Test
+    void configurationDeep() {
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+        AppConfig bean = ac.getBean(AppConfig.class);
+
+        System.out.println("bean = " + bean.getClass());
+
+    }
 }
