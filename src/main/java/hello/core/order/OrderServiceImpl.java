@@ -18,7 +18,7 @@ public class OrderServiceImpl implements OrderService{
     // 특징
     // 1. "선택, 변경" 가능성이 있는 의존관계에 사용
     // 2. 자바빈 프로퍼티 규약의 수정자 메서드 방식을 사용하는 방법이다.
-    @Autowired
+    @Autowired(required = false)
     public void setMemberRepository(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
