@@ -1,9 +1,11 @@
 package hello.core.order;
 
+import hello.core.annotation.MainDiscountPolicy;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,14 @@ public class OrderServiceImpl implements OrderService{
     private final DiscountPolicy discountPolicy;
 
 
+    // DiscountPolicy의 파라미터명을 discountPolicy가 아닌
+    // rateDiscountPolicy로 지정해놓으면
+    // 빈이 두개가 발견되어도 RateDiscountPolicy를 가리키게 된다다
+   @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy rateDiscountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = rateDiscountPolicy;
+    }
 
     // 수정자 주입 (setter 주입)
     // setter라 불리는 필드의 값을 변경하는 수정자 메서드를 통해서 의존관계를 주입하는 방법이다
@@ -47,11 +57,7 @@ public class OrderServiceImpl implements OrderService{
     // 누군가 실수로 변경할 수 도 있고, 변경하면 안되는 메서드를 열어두는 것은 좋은 설계 방법이 아니다.
     // 생성자 주입은 객체를 생성할 때 딱 한번만 호출되므로 이후에 호출되는 일이 없다.
     // 따라서 불변하게 설계할 수 있다.
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
+
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
